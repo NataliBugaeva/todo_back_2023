@@ -1,4 +1,4 @@
-import {deleteTask} from "../todo_db-model.js";
+import {deleteAllTaskFromTodo} from "../todo_db-model.js";
 
 
 class TaskController {
@@ -43,14 +43,30 @@ class TaskController {
     //     }
     // }
 
-    deleteTask(request, result) {
-        const {id} = request.body;
+  /*  deleteAllTasksFromCertainTodo(request, result) {
+        const {todoId} = request.body;
         try {
-            deleteTask(id).then(res => {
-
-                return result.status(200).send(`UTask(s) deleted with ID: ${id}`)
+            deleteAllTaskFromTodo(todoId).then(res => {
+                debugger
+                deleteTodolist(todoId).then(r => {
+                    debugger
+                    return result.status(200).send(`Todo was deleted`)
+                })
+               // return result.status(200).send(`Task(s) deleted with todoID: ${todoId}`)
             })
         } catch (e) {
+            result.status(500).json(e);
+        }
+    }*/
+
+    deleteCertainTask(request, result) {
+        const taskId = request.params.id;
+        try {
+            deleteAllTaskFromTodo(taskId).then(res => {
+                debugger
+                return result.status(200).send(`Task was deleted with ID: ${taskId}`)
+            })
+        }catch (e) {
             result.status(500).json(e);
         }
     }

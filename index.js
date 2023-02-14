@@ -2,8 +2,9 @@ import express from 'express';
 import routerTodolist from './tdolist/routerTodolist.js';
 import cors from "cors";
 import routerTask from "./task/routerTask.js";
+import bodyParser from "body-parser";
 
-const corsOptions ={
+const corsOptions = {
     origin:'*',
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
@@ -19,12 +20,17 @@ const PORT = 5000;
 //вызов функции express создает экземпляр нашего приложения
 const app = express();
 
-//const todo_db_model = require('./todo_db-model');
 
+
+//const todo_db_model = require('./todo_db-model');
 app.use(express.json());
+app.use(cors(corsOptions));
+
+// app.use(express.json());
 app.use('/api', routerTodolist);
 app.use('/api', routerTask);
-app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
@@ -32,6 +38,7 @@ app.use((req, res, next) => {
     res.append('Access-Control-Allow-Headers', ['*', 'Authorization']);
     next();
 });
+
 
 // async function startApp() {
 //     try {

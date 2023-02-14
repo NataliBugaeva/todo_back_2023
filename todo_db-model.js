@@ -22,11 +22,11 @@ const pool = new Pool({
 };
 
 export const updateTodolist = (todo) => {
-    if(!todo.id) {
+    if(!todo.todo_id) {
             throw new Error("Id не указан");
         }
     return new Promise(function(resolve, reject) {
-        pool.query('UPDATE todos SET title = $2, filter = $3 WHERE todo_id = $1', [todo.id, todo.title, todo.filter], (error, results) => {
+        pool.query('UPDATE todos SET title = $2, filter = $3 WHERE todo_id = $1 RETURNING *', [todo.todo_id, todo.title, todo.filter], (error, results) => {
             if (error) {
                 reject(error)
             }
@@ -42,7 +42,7 @@ export const addTodolist = (todo) => {
              if (error) {
                  reject(error)
              }
-             console.log(results.rows)
+             //console.log(results.rows)
              resolve(results.rows);
          })
      })
@@ -59,9 +59,9 @@ export const deleteTodolist = (id) => {
      })
 }
 
-export const deleteTask = (id) => {
+export const deleteAllTaskFromTodo = (todoId) => {
     return new Promise((resolve, reject) => {
-        pool.query('DELETE FROM tasks WHERE todo_id=$1', [id], (error, result) => {
+        pool.query('DELETE FROM tasks WHERE todo_id=$1', [todoId], (error, result) => {
             if (error) {
                 reject(error)
             }

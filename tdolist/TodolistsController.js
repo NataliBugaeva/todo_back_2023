@@ -1,4 +1,5 @@
-import {addTodolist, getTodolists, updateTodolist, deleteTodolist, deleteTask} from "../todo_db-model.js";
+import {addTodolist, getTodolists, updateTodolist, deleteTodolist, deleteAllTaskFromTodo} from "../todo_db-model.js";
+
 
 class TodolistsController {
 
@@ -11,18 +12,20 @@ class TodolistsController {
 
         } catch(e) {
             res.status(500).json(e);
-            console.log(e)
+          //  console.log(e)
         }
     }
 
 
      updateTodolist(req, res) {
          // res.header("Access-Control-Allow-Origin", "*");
-        const id = parseInt(req.params.id)
+        const todo_id = req.params.id
         const { title, filter } = req.body;
+        console.log(req.body)
         try {
-            updateTodolist({id, title, filter}).then(todo => {
-               return res.json({id, title, filter})
+            updateTodolist({todo_id, title, filter}).then(todo => {
+                console.log(todo)
+               return res.json({todo_id: +todo_id, title, filter})
             })
         } catch(e) {
             res.status(500).json(e);
@@ -35,28 +38,29 @@ class TodolistsController {
 
         try {
             addTodolist({title, filter}).then(todo => {
-                console.log(todo)
                 return res.json(({todos: todo}))
             })
         } catch (e) {
             res.status(500).json(e);
-            console.log(e)
+          //  console.log(e)
         }
     }
 
     deleteTodolist(request, result) {
-       // result.header("Access-Control-Allow-Origin", "*");
-        const id = parseInt(request.params.id)
+        result.header("Access-Control-Allow-Origin", "*");
+        const todoId = request.params.id;
+       // console.log(todoId)
         try {
-            deleteTask(id).then(res => {
-                deleteTodolist(id).then(res => {
-                    result.status(200).send(`Todolist deleted with ID: ${id}`)
+            deleteAllTaskFromTodo(todoId).then(res => {
+                deleteTodolist(todoId).then(res => {
+                    result.status(200).send({todoId: todoId})
                 })
             })
         } catch(e) {
             result.status(500).json(e);
         }
     }
+
 }
 
 export default new TodolistsController();

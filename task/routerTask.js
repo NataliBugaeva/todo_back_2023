@@ -9,7 +9,9 @@ const routerTask = new Router();
 // routerTask.post('/tasks', TaskController.create);
 // //апдейтим тудулист
 // routerTask.put('/tasks', TaskController.updateTask);
-// //удаляем тудулист
-routerTask.delete('/tasks', TaskController.deleteTask)
+//удфляемм конкретную таску по ее айдишке
+routerTask.delete('/tasks/:id', TaskController.deleteCertainTask);
+// // //удаляем все такски из конкретного тудулиста при его удалении
+// routerTask.delete('/tasks/deleteAll/:todoId', TaskController.deleteAllTasksFromCertainTodo);
 
 export default routerTask;
