@@ -59,6 +59,29 @@ export const deleteTodolist = (id) => {
      })
 }
 
+export const getAllTasks = () => {
+    return new Promise((resolve, reject) => {
+        pool.query('SELECT * FROM tasks', (error, result) => {
+            if (error) {
+                reject(error)
+            }
+            resolve(result.rows);
+        })
+    })
+}
+
+export const addNewTask = (body) => {
+    return new Promise((resolve, reject) => {
+        pool.query('INSERT INTO tasks (title, status, todo_id) VALUES ($1, $2, $3) RETURNING *', [body.title, body.status, body.todo_id], (error, result) => {
+            if (error) {
+                reject(error)
+            }
+            resolve(result.rows);
+        })
+    })
+}
+
+
 export const deleteAllTaskFromTodo = (todoId) => {
     return new Promise((resolve, reject) => {
         pool.query('DELETE FROM tasks WHERE todo_id=$1', [todoId], (error, result) => {
@@ -70,4 +93,26 @@ export const deleteAllTaskFromTodo = (todoId) => {
     })
 }
 
+
+export const deleteTask = (taskId) => {
+    return new Promise((resolve, reject) => {
+        pool.query('DELETE FROM tasks WHERE task_id=$1', [taskId], (error, result) => {
+            if (error) {
+                reject(error)
+            }
+            resolve();
+        })
+    })
+}
+
+export const updateTask = (body) => {
+    return new Promise((resolve, reject) => {
+        pool.query('UPDATE tasks SET title = $2, status = $3 WHERE task_id = $1 RETURNING *', [body.task_id, body.title, body.status], (error, result) => {
+            if (error) {
+                reject(error)
+            }
+            resolve(result);
+        })
+    })
+}
 

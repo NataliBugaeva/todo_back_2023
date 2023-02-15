@@ -1,4 +1,4 @@
-import {deleteAllTaskFromTodo} from "../todo_db-model.js";
+import {addTodolist, deleteAllTaskFromTodo, addNewTask, getAllTasks, deleteTask, updateTask} from "../todo_db-model.js";
 
 
 class TaskController {
@@ -59,12 +59,51 @@ class TaskController {
         }
     }*/
 
-    deleteCertainTask(request, result) {
-        const taskId = request.params.id;
+    getAllTasks(request, result) {
+        result.header("Access-Control-Allow-Origin", "*");
         try {
-            deleteAllTaskFromTodo(taskId).then(res => {
-                debugger
-                return result.status(200).send(`Task was deleted with ID: ${taskId}`)
+            getAllTasks().then(tasks => {
+                console.log(tasks)
+                return result.json(({tasks}))
+            })
+        } catch (e) {
+            result.status(500).json(e);
+            //  console.log(e)
+        }
+    }
+
+    addTask(request, result) {
+        result.header("Access-Control-Allow-Origin", "*");
+        const {title, status, todo_id} = request.body;
+        try {
+            addNewTask({title, status, todo_id}).then(task => {
+                console.log(task)
+                return result.json(({task}))
+            })
+        } catch (e) {
+            result.status(500).json(e);
+            //  console.log(e)
+        }
+    }
+
+    deleteCertainTask(request, result) {
+        const taskId = +request.params.id;
+        try {
+            deleteTask(taskId).then(res => {
+                return result.status(200).send({taskId: taskId})
+            })
+        }catch (e) {
+            result.status(500).json(e);
+        }
+    }
+
+    updateTask(request, result) {
+        result.header("Access-Control-Allow-Origin", "*");
+        const {title, status} = request.body;
+        const task_id = +request.params.id;
+        try {
+            updateTask({task_id, title, status}).then(res => {
+                return result.status(200).send({task: res.rows[0]})
             })
         }catch (e) {
             result.status(500).json(e);
