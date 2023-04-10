@@ -21,10 +21,8 @@ class TodolistsController {
          // res.header("Access-Control-Allow-Origin", "*");
         const todo_id = req.params.id
         const { title, filter } = req.body;
-        console.log(req.body)
         try {
             updateTodolist({todo_id, title, filter}).then(todo => {
-                console.log(todo)
                return res.json({todo_id: +todo_id, title, filter})
             })
         } catch(e) {

@@ -63,7 +63,6 @@ class TaskController {
         result.header("Access-Control-Allow-Origin", "*");
         try {
             getAllTasks().then(tasks => {
-                console.log(tasks)
                 return result.json(({tasks}))
             })
         } catch (e) {
@@ -77,7 +76,6 @@ class TaskController {
         const {title, status, todo_id} = request.body;
         try {
             addNewTask({title, status, todo_id}).then(task => {
-                console.log(task)
                 return result.json(({task}))
             })
         } catch (e) {
